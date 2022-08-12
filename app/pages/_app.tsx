@@ -8,6 +8,11 @@ import {
   useQueryErrorResetBoundary,
 } from "blitz"
 import LoginForm from "app/auth/components/LoginForm"
+import { createTheme, NextUIProvider, defaultTheme } from "@nextui-org/react"
+
+const darkTheme = createTheme({
+  type: "dark",
+})
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
@@ -17,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
       FallbackComponent={RootErrorFallback}
       onReset={useQueryErrorResetBoundary().reset}
     >
-      {getLayout(<Component {...pageProps} />)}
+      <NextUIProvider theme={darkTheme}>{getLayout(<Component {...pageProps} />)}</NextUIProvider>
     </ErrorBoundary>
   )
 }

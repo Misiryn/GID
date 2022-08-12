@@ -2,6 +2,7 @@ import { useState, ReactNode, PropsWithoutRef } from "react"
 import { Formik, FormikProps } from "formik"
 import { validateZodSchema } from "blitz"
 import { z } from "zod"
+import { Button } from "@nextui-org/react"
 
 export interface FormProps<S extends z.ZodType<any, any>>
   extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {
@@ -58,14 +59,21 @@ export function Form<S extends z.ZodType<any, any>>({
           )}
 
           {submitText && (
-            <button type="submit" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              css={{ width: "100%", display: "block", my: "$8" }}
+            >
               {submitText}
-            </button>
+            </Button>
           )}
 
           <style global jsx>{`
+            .form {
+              width: 100%;
+            }
             .form > * + * {
-              margin-top: 1rem;
+              margin-top: 0.5rem;
             }
           `}</style>
         </form>

@@ -1,4 +1,5 @@
 import { Head, BlitzLayout } from "blitz"
+import { Header } from "../components/Header"
 
 const Layout: BlitzLayout<{ title?: string; children?: React.ReactNode }> = ({
   title,
@@ -10,7 +11,7 @@ const Layout: BlitzLayout<{ title?: string; children?: React.ReactNode }> = ({
         <title>{title || "getitdone"}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      <Header />
       {children}
     </>
   )

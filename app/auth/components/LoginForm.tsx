@@ -1,8 +1,10 @@
 import { AuthenticationError, Link, useMutation, Routes, PromiseReturnType } from "blitz"
+import { Card, Link as StyleLink, Spacer } from "@nextui-org/react"
 import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import login from "app/auth/mutations/login"
 import { Login } from "app/auth/validations"
+import { Button, Text } from "@nextui-org/react"
 
 type LoginFormProps = {
   onSuccess?: (user: PromiseReturnType<typeof login>) => void
@@ -12,8 +14,21 @@ export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
 
   return (
-    <div>
-      <h1>Login</h1>
+    <Card
+      css={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        maxWidth: "500px",
+        p: "2rem",
+        mx: "auto",
+        mt: "2rem",
+        bg: "#000",
+      }}
+    >
+      <Text h2 css={{ mb: "$8" }}>
+        Login
+      </Text>
 
       <Form
         submitText="Login"
@@ -37,17 +52,20 @@ export const LoginForm = (props: LoginFormProps) => {
       >
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
-        <div>
+        <Spacer y={1} />
+        <div style={{ textAlign: "center", marginBottom: "1rem" }}>
           <Link href={Routes.ForgotPasswordPage()}>
-            <a>Forgot your password?</a>
+            <StyleLink>Forgot your password?</StyleLink>
           </Link>
         </div>
       </Form>
-
-      <div style={{ marginTop: "1rem" }}>
-        Or <Link href={Routes.SignupPage()}>Sign Up</Link>
+      <Spacer y={1} />
+      <div>
+        <Link href={Routes.SignupPage()}>
+          <StyleLink> Sign Up</StyleLink>
+        </Link>
       </div>
-    </div>
+    </Card>
   )
 }
 

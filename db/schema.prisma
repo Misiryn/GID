@@ -23,6 +23,7 @@ model User {
 
   tokens   Token[]
   sessions Session[]
+  Service  Service[]
 }
 
 model Session {
@@ -63,3 +64,17 @@ model Token {
 // enum TokenType {
 //   RESET_PASSWORD
 // }
+
+model Service {
+  id         Int      @id @default(autoincrement())
+  title      String
+  slug       String
+  details    String
+  price      Int
+  offerPrice Int
+  coverImage String
+  createdBy  User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     Int
+}
