@@ -4,6 +4,7 @@ import Layout from "app/core/layouts/Layout"
 import getService from "app/services/queries/getService"
 import updateService from "app/services/mutations/updateService"
 import { ServiceForm, FORM_ERROR } from "app/services/components/ServiceForm"
+import { Card, Text } from "@nextui-org/react"
 
 export const EditService = () => {
   const router = useRouter()
@@ -21,13 +22,19 @@ export const EditService = () => {
   return (
     <>
       <Head>
-        <title>Edit Service {service.id}</title>
+        <title>Edit Service | {service.title}</title>
       </Head>
 
-      <div>
-        <h1>Edit Service {service.id}</h1>
-        <pre>{JSON.stringify(service, null, 2)}</pre>
-
+      <Card
+        css={{
+          display: "flex",
+          maxWidth: "500px",
+          p: "2rem",
+          mx: "auto",
+          bg: "none",
+        }}
+      >
+        <Text h3>Edit Service {service.title}</Text>
         <ServiceForm
           submitText="Update Service"
           // TODO use a zod schema for form validation
@@ -51,7 +58,7 @@ export const EditService = () => {
             }
           }}
         />
-      </div>
+      </Card>
     </>
   )
 }

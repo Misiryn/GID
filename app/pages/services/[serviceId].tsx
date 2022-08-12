@@ -1,8 +1,20 @@
 import { Suspense } from "react"
-import { Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation, Routes } from "blitz"
+import ReactMarkdown from "react-markdown"
+import {
+  Head,
+  Link,
+  useRouter,
+  useQuery,
+  useParam,
+  BlitzPage,
+  useMutation,
+  Routes,
+  Image,
+} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getService from "app/services/queries/getService"
 import deleteService from "app/services/mutations/deleteService"
+import { Button, Container, Divider, Loading, Spacer, Text } from "@nextui-org/react"
 
 export const Service = () => {
   const router = useRouter()
@@ -13,29 +25,64 @@ export const Service = () => {
   return (
     <>
       <Head>
-        <title>Service {service.id}</title>
+        <title>Service | {service.title}</title>
       </Head>
 
       <div>
-        <h1>Service {service.id}</h1>
-        <pre>{JSON.stringify(service, null, 2)}</pre>
-
-        <Link href={Routes.EditServicePage({ serviceId: service.id })}>
-          <a>Edit</a>
-        </Link>
-
-        <button
-          type="button"
-          onClick={async () => {
-            if (window.confirm("This will be deleted")) {
-              await deleteServiceMutation({ id: service.id })
-              router.push(Routes.ServicesPage())
-            }
+        {/* <pre>{JSON.stringify(service, null, 2)}</pre> */}
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "400px",
+            borderRadius: "1rem",
+            overflow: "hidden",
           }}
-          style={{ marginLeft: "0.5rem" }}
         >
-          Delete
-        </button>
+          <Image src={service.coverImage} alt={service.title} layout="fill" objectFit="cover" />
+        </div>
+        <Text h2 css={{ mt: "$10" }}>
+          {service.title}
+        </Text>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Text h2 margin={0}>
+            ₹ {service.offerPrice} &nbsp;{" "}
+          </Text>
+          <Text del margin={0} color="error" css={{ fontSize: "1.5rem" }}>
+            ₹ {service.price}
+          </Text>
+        </div>
+        <Button size="lg" css={{ mt: "$12" }}>
+          Book Now
+        </Button>
+        <Spacer y={2} />
+        <Divider />
+        <Spacer y={2} />
+        <ReactMarkdown>{service.details}</ReactMarkdown>
+        <Spacer y={2} />
+        <Divider />
+        <Spacer y={2} />
+        <div style={{ display: "flex" }}>
+          <Link href={Routes.EditServicePage({ serviceId: service.id })}>
+            <Button as="a" bordered>
+              Edit
+            </Button>
+          </Link>
+          <Button
+            type="button"
+            color="error"
+            onClick={async () => {
+              if (window.confirm("This will be deleted")) {
+                await deleteServiceMutation({ id: service.id })
+                router.push(Routes.ServicesPage())
+              }
+            }}
+            style={{ marginLeft: "0.5rem" }}
+          >
+            Delete
+          </Button>
+        </div>
+        <Spacer y={4} />
       </div>
     </>
   )
@@ -43,21 +90,20 @@ export const Service = () => {
 
 const ShowServicePage: BlitzPage = () => {
   return (
-    <div>
+    <Container>
       <p>
         <Link href={Routes.ServicesPage()}>
           <a>Services</a>
         </Link>
       </p>
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading>Fetching Latest Data</Loading>}>
         <Service />
       </Suspense>
-    </div>
+    </Container>
   )
 }
 
-ShowServicePage.authenticate = true
 ShowServicePage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default ShowServicePage

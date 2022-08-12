@@ -64,7 +64,15 @@ export const UserInfo = () => {
 
 export const Header = () => {
   return (
-    <Container>
+    <Container
+      css={{
+        position: "sticky",
+        top: "0",
+        borderBottom: "$gray100 1px solid",
+        zIndex: 100,
+        bg: "#000",
+      }}
+    >
       <Grid.Container justify="space-between" css={{ py: "$8" }}>
         <Grid>
           <Link href={Routes.Home()}>

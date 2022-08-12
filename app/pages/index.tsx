@@ -1,4 +1,4 @@
-import { BlitzPage, Link } from "blitz"
+import { BlitzPage, Link, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 
 import { Button, Container, Text } from "@nextui-org/react"
@@ -22,7 +22,7 @@ const Home: BlitzPage = () => {
           </Text>
           <Text h1>One Stop Solution to all of your Problem</Text>
         </div>
-        <Link href="#">
+        <Link href={Routes.ServicesPage()}>
           <Button as="a" css={{ mt: "$16" }}>
             Explore Our Services
           </Button>

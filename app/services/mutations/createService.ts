@@ -1,14 +1,27 @@
 import { resolver } from "blitz"
 import db from "db"
-import { z } from "zod"
+import { CreateService } from "../validation"
 
-const CreateService = z.object({
-  name: z.string(),
-})
+export default resolver.pipe(
+  resolver.zod(CreateService),
+  resolver.authorize(),
+  async ({ createdBy, ...input }) => {
+    console.log(input)
+    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+    const service = await db.service.create({
+      data: {
+        ...input,
+        createdBy: {
+          connect: {
+            id: createdBy,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    })
 
-export default resolver.pipe(resolver.zod(CreateService), resolver.authorize(), async (input) => {
-  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const service = await db.service.create({ data: input })
-
-  return service
-})
+    return service
+  }
+)

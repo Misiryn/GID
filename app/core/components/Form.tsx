@@ -35,7 +35,9 @@ export function Form<S extends z.ZodType<any, any>>({
     <Formik
       initialValues={initialValues || {}}
       validate={validateZodSchema(schema)}
+      enableReinitialize
       onSubmit={async (values, { setErrors }) => {
+        console.log(values)
         const { FORM_ERROR, ...otherErrors } = (await onSubmit(values)) || {}
 
         if (FORM_ERROR) {
@@ -47,37 +49,41 @@ export function Form<S extends z.ZodType<any, any>>({
         }
       }}
     >
-      {({ handleSubmit, isSubmitting }) => (
-        <form onSubmit={handleSubmit} className="form" {...props}>
-          {/* Form fields supplied as children are rendered here */}
-          {children}
+      {({ handleSubmit, isSubmitting, errors }) => {
+        console.log(errors)
 
-          {formError && (
-            <div role="alert" style={{ color: "red" }}>
-              {formError}
-            </div>
-          )}
+        return (
+          <form onSubmit={handleSubmit} className="form" {...props}>
+            {/* Form fields supplied as children are rendered here */}
+            {children}
 
-          {submitText && (
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              css={{ width: "100%", display: "block", my: "$8" }}
-            >
-              {submitText}
-            </Button>
-          )}
+            {formError && (
+              <div role="alert" style={{ color: "red" }}>
+                {formError}
+              </div>
+            )}
 
-          <style global jsx>{`
-            .form {
-              width: 100%;
-            }
-            .form > * + * {
-              margin-top: 0.5rem;
-            }
-          `}</style>
-        </form>
-      )}
+            {submitText && (
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                css={{ width: "100%", display: "block", my: "$8" }}
+              >
+                {submitText}
+              </Button>
+            )}
+
+            <style global jsx>{`
+              .form {
+                width: 100%;
+              }
+              .form > * + * {
+                margin-top: 0.5rem;
+              }
+            `}</style>
+          </form>
+        )
+      }}
     </Formik>
   )
 }

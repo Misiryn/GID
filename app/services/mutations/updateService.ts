@@ -1,11 +1,13 @@
 import { resolver } from "blitz"
 import db from "db"
 import { z } from "zod"
+import { CreateService } from "../validation"
 
-const UpdateService = z.object({
-  id: z.number(),
-  name: z.string(),
-})
+const UpdateService = CreateService.merge(
+  z.object({
+    id: z.number(),
+  })
+).omit({ createdBy: true })
 
 export default resolver.pipe(
   resolver.zod(UpdateService),
