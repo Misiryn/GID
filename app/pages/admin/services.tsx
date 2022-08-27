@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import { Head, usePaginatedQuery, useRouter, BlitzPage, useMutation, Link, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import { Spacer, Divider, Button, Text, Container, Table } from "@nextui-org/react"
+import { Spacer, Divider, Button, Text, Container, Table, Grid } from "@nextui-org/react"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import getServices from "app/services/queries/getServices"
 import { Service } from "@prisma/client"
@@ -96,10 +96,15 @@ const AdminServicesPage: BlitzPage = () => {
         <title>Services</title>
       </Head>
 
-      <Container>
-        <Text h2 css={{ mt: "$12" }}>
-          Services
-        </Text>
+      <Container css={{ pt: "1rem" }}>
+        <Grid.Container alignItems="center">
+          <Text h2 margin={0} css={{ marginRight: "1rem" }}>
+            Services
+          </Text>
+          <Link href={Routes.NewServicePage()}>
+            <Button as="a">Create Service</Button>
+          </Link>
+        </Grid.Container>
         <Suspense fallback={<div>Loading...</div>}>
           <AdminServices />
         </Suspense>

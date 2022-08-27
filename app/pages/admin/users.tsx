@@ -1,11 +1,9 @@
 import { Suspense } from "react"
-import { Head, usePaginatedQuery, useRouter, BlitzPage, useMutation, Link, Routes } from "blitz"
+import { Head, usePaginatedQuery, useRouter, BlitzPage, useMutation } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { Spacer, Divider, Button, Text, Container, Table } from "@nextui-org/react"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
-import getServices from "app/services/queries/getServices"
-import { Service, User } from "@prisma/client"
-import deleteService from "app/services/mutations/deleteService"
+import { User } from "@prisma/client"
 import getUsers from "app/users/queries/getUsers"
 import deleteUser from "app/users/mutations/deleteUser"
 
@@ -43,21 +41,12 @@ export const AdminUsersList = () => {
         <Table.Body>
           {users.map((user: User) => (
             <Table.Row key={user.id}>
-              <Table.Cell>
-                <Link href={Routes.ShowServicePage({ serviceId: user.id })}>
-                  <a>{user.id}</a>
-                </Link>
-              </Table.Cell>
+              <Table.Cell>{user.id}</Table.Cell>
               <Table.Cell>{user.name || "---"}</Table.Cell>
               <Table.Cell>{user.email}</Table.Cell>
               <Table.Cell>{user.role}</Table.Cell>
               <Table.Cell>{user.createdAt.toDateString()}</Table.Cell>
               <Table.Cell css={{ display: "flex", gap: "$8" }}>
-                <Link href={Routes.EditServicePage({ serviceId: user.id })}>
-                  <Button size="xs" onClick={async () => {}}>
-                    Edit
-                  </Button>
-                </Link>
                 <Button
                   color="error"
                   bordered

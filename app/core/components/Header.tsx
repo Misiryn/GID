@@ -30,26 +30,30 @@ export const UserInfo = () => {
         <Dropdown.Item key="my_profile" withDivider>
           <span onClick={async () => await Router.push("/profile")}> My Profile</span>
         </Dropdown.Item>
-        <Dropdown.Item key="orders">
+        <Dropdown.Item key="orders" withDivider>
           <span onClick={async () => await Router.push("/orders")}>Orders</span>
         </Dropdown.Item>
-        {currentUser?.role === "ADMIN" ? (
-          <>
-            <Dropdown.Item key="users" withDivider>
-              Manage Users
-            </Dropdown.Item>
-            <Dropdown.Item key="services" withDivider>
-              Manage Services
-            </Dropdown.Item>
-            <Dropdown.Item key="services" withDivider>
-              Manage Orders
-            </Dropdown.Item>
-          </>
-        ) : (
-          <Dropdown.Item key="logout" color="error" withDivider className="sr-only">
-            some
-          </Dropdown.Item>
-        )}
+
+        <Dropdown.Item
+          key="admin_users"
+          css={{ ...(currentUser.role !== "ADMIN" && { display: "none" }) }}
+        >
+          <span onClick={async () => await Router.push("/admin/users")}>Manage Users</span>
+        </Dropdown.Item>
+        <Dropdown.Item
+          key="admin_services"
+          css={{ ...(currentUser.role !== "ADMIN" && { display: "none" }) }}
+        >
+          <span onClick={async () => await Router.push("/admin/services")}>Manage Services</span>
+        </Dropdown.Item>
+        <Dropdown.Item
+          key="admin_order"
+          withDivider
+          css={{ ...(currentUser.role !== "ADMIN" && { display: "none" }) }}
+        >
+          <span onClick={async () => await Router.push("/admin/orders")}>Manage Orders</span>
+        </Dropdown.Item>
+
         <Dropdown.Item key="logout" color="error" withDivider>
           <span onClick={async () => await logoutMutation()}>Log Out</span>
         </Dropdown.Item>
