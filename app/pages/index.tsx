@@ -22,7 +22,7 @@ const Home: BlitzPage = () => {
           </Text>
           <Text h1>One Stop Solution to all of your Problem</Text>
         </div>
-        <Link href={Routes.ServicesPage()}>
+        <Link href={"/services"}>
           <Button as="a" css={{ mt: "$16" }}>
             Explore Our Services
           </Button>

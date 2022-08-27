@@ -13,12 +13,14 @@ import {
   Spacer,
   Text,
 } from "@nextui-org/react"
+import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 const ITEMS_PER_PAGE = 9
 
 export const ServicesList = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
+  const currentUser = useCurrentUser()
   const [{ services, hasMore }] = usePaginatedQuery(getServices, {
     orderBy: { id: "asc" },
     skip: ITEMS_PER_PAGE * page,
@@ -30,6 +32,14 @@ export const ServicesList = () => {
 
   return (
     <>
+      {currentUser?.role === "ADMIN" && (
+        <>
+          <Link href={Routes.NewServicePage()}>
+            <Button as="a">Create Service</Button>
+          </Link>
+          <Spacer y={2} />
+        </>
+      )}
       <Grid.Container gap={2} justify="flex-start">
         {services.map((service) => (
           <Grid key={service.id} xs={12} sm={4}>
@@ -92,9 +102,6 @@ const ServicesPage: BlitzPage = () => {
         <Spacer y={2} />
         <Divider />
         <Spacer y={2} />
-        <Link href={Routes.NewServicePage()}>
-          <Button as="a">Create Service</Button>
-        </Link>
         <Spacer y={2} />
       </Container>
     </>

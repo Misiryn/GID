@@ -28,19 +28,28 @@ export const UserInfo = () => {
           </Text>
         </Dropdown.Item>
         <Dropdown.Item key="my_profile" withDivider>
-          My Profile
+          <span onClick={async () => await Router.push("/profile")}> My Profile</span>
         </Dropdown.Item>
-        <Dropdown.Item key="service_history">Service History</Dropdown.Item>
-        {/* {currentUser.role === "ADMIN" ? (
-
-            <Dropdown.Item key="users" withDivider >
+        <Dropdown.Item key="orders">
+          <span onClick={async () => await Router.push("/orders")}>Orders</span>
+        </Dropdown.Item>
+        {currentUser?.role === "ADMIN" ? (
+          <>
+            <Dropdown.Item key="users" withDivider>
               Manage Users
             </Dropdown.Item>
             <Dropdown.Item key="services" withDivider>
               Manage Services
             </Dropdown.Item>
-
-        ) } */}
+            <Dropdown.Item key="services" withDivider>
+              Manage Orders
+            </Dropdown.Item>
+          </>
+        ) : (
+          <Dropdown.Item key="logout" color="error" withDivider className="sr-only">
+            some
+          </Dropdown.Item>
+        )}
         <Dropdown.Item key="logout" color="error" withDivider>
           <span onClick={async () => await logoutMutation()}>Log Out</span>
         </Dropdown.Item>

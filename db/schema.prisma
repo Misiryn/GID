@@ -24,6 +24,7 @@ model User {
   tokens   Token[]
   sessions Session[]
   Service  Service[]
+  Order    Order[]
 }
 
 model Session {
@@ -37,7 +38,7 @@ model Session {
   publicData         String?
   privateData        String?
 
-  user   User? @relation(fields: [userId], references: [id])
+  user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int?
 }
 
@@ -73,8 +74,24 @@ model Service {
   price      Int
   offerPrice Int
   coverImage String
-  createdBy  User     @relation(fields: [userId], references: [id])
+  createdBy  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   userId     Int
+  Order      Order[]
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  service         Service  @relation(fields: [serviceId], references: [id])
+  serviceDateTime DateTime
+  createdBy       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  total           Int
+  isCompleted     Boolean  @default(false)
+  address         String
+  is_paid         Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  serviceId       Int
+  userId          Int
 }

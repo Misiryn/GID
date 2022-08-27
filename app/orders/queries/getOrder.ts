@@ -2,16 +2,16 @@ import { resolver, NotFoundError } from "blitz"
 import db from "db"
 import { z } from "zod"
 
-const GetService = z.object({
+const GetOrder = z.object({
   // This accepts type of undefined, but is required at runtime
   id: z.number().optional().refine(Boolean, "Required"),
 })
 
-export default resolver.pipe(resolver.zod(GetService), async ({ id }) => {
+export default resolver.pipe(resolver.zod(GetOrder), resolver.authorize(), async ({ id }) => {
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const service = await db.service.findFirst({ where: { id } })
+  const order = await db.order.findFirst({ where: { id } })
 
-  if (!service) throw new NotFoundError()
+  if (!order) throw new NotFoundError()
 
-  return service
+  return order
 })

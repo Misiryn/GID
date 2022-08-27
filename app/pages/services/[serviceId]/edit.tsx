@@ -71,7 +71,7 @@ const EditServicePage: BlitzPage = () => {
       </Suspense>
 
       <p>
-        <Link href={Routes.ServicesPage()}>
+        <Link href={"/services"}>
           <a>Services</a>
         </Link>
       </p>
