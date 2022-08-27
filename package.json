@@ -2,7 +2,7 @@
   "name": "getitdone",
   "version": "1.0.0",
   "scripts": {
-    "dev": "blitz --openssl-legacy-provider dev",
+    "dev": "blitz dev",
     "build": "blitz build",
     "start": "blitz start",
     "studio": "blitz prisma studio",
@@ -26,11 +26,14 @@
   "dependencies": {
     "@nextui-org/react": "1.0.0-beta.9",
     "@prisma/client": "3.16.0-integration-tmp-revert-node14.1",
+    "@stripe/react-stripe-js": "1.10.0",
+    "@stripe/stripe-js": "1.35.0",
     "blitz": "0.45.5",
     "formik": "2.2.9",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-markdown": "8.0.3",
+    "stripe": "10.3.0",
     "zod": "3.18.0"
   },
   "devDependencies": {
