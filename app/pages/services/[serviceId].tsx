@@ -101,26 +101,28 @@ export const Service = () => {
         <Spacer y={2} />
         <Divider />
         <Spacer y={2} />
-        <div style={{ display: "flex" }}>
-          <Link href={Routes.EditServicePage({ serviceId: service.id })}>
-            <Button as="a" bordered>
-              Edit
+        {currentUser?.email === "ADMIN" && (
+          <div style={{ display: "flex" }}>
+            <Link href={Routes.EditServicePage({ serviceId: service.id })}>
+              <Button as="a" bordered>
+                Edit
+              </Button>
+            </Link>
+            <Button
+              type="button"
+              color="error"
+              onClick={async () => {
+                if (window.confirm("This will be deleted")) {
+                  await deleteServiceMutation({ id: service.id })
+                  router.push("/services")
+                }
+              }}
+              style={{ marginLeft: "0.5rem" }}
+            >
+              Delete
             </Button>
-          </Link>
-          <Button
-            type="button"
-            color="error"
-            onClick={async () => {
-              if (window.confirm("This will be deleted")) {
-                await deleteServiceMutation({ id: service.id })
-                router.push("/services")
-              }
-            }}
-            style={{ marginLeft: "0.5rem" }}
-          >
-            Delete
-          </Button>
-        </div>
+          </div>
+        )}
         <Spacer y={4} />
       </div>
     </>

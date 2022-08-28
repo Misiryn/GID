@@ -5,7 +5,18 @@ import { Button, Container, Text } from "@nextui-org/react"
 
 const Home: BlitzPage = () => {
   return (
-    <Container>
+    <Container css={{ backgroundColor: "none" }}>
+      <div
+        style={{
+          backgroundImage: `url("https://images.unsplash.com/photo-1449247613801-ab06418e2861?auto=format&fit=crop&w=1771&q=80")`,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          opacity: 0.2,
+        }}
+      />
       <div
         style={{
           display: "flex",
@@ -14,6 +25,7 @@ const Home: BlitzPage = () => {
           textAlign: "center",
           maxWidth: "32rem",
           margin: "2rem auto",
+          zIndex: 100,
         }}
       >
         <div>
