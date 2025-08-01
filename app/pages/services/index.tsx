@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
-const ITEMS_PER_PAGE = 9
+const ITEMS_PER_PAGE = 6
 
 export const ServicesList = () => {
   const router = useRouter()
@@ -45,7 +45,7 @@ export const ServicesList = () => {
           <Grid key={service.id} xs={12} sm={4}>
             <Link href={Routes.ShowServicePage({ serviceId: service.id })}>
               <Card isPressable>
-                <Card.Body css={{ p: 0 }}>
+                <Card.Body css={{ padding: 0 }}>
                   <Card.Image
                     src={service.coverImage}
                     objectFit="cover"
