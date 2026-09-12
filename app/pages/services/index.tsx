@@ -52,6 +52,10 @@ export const ServicesList = () => {
                     width="100%"
                     height={240}
                     alt={service.title}
+                    onError={(e) => {
+                      ;(e.currentTarget as HTMLImageElement).src =
+                        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1000&q=80"
+                    }}
                   />
                 </Card.Body>
                 <Card.Footer css={{ justifyItems: "flex-start" }}>

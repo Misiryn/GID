@@ -9,7 +9,6 @@ import {
   BlitzPage,
   useMutation,
   Routes,
-  Image,
 } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getService from "app/services/queries/getService"
@@ -68,7 +67,19 @@ export const Service = () => {
             overflow: "hidden",
           }}
         >
-          <Image src={service.coverImage} alt={service.title} layout="fill" objectFit="cover" />
+          <img
+            src={service.coverImage}
+            alt={service.title}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+            onError={(e) => {
+              ;(e.currentTarget as HTMLImageElement).src =
+                "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1000&q=80"
+            }}
+          />
         </div>
         <Text h2 css={{ mt: "$10" }}>
           {service.title}

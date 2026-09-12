@@ -19,7 +19,12 @@ export function ServiceForm<S extends z.ZodType<any, any>>(props: FormProps<S>) 
         placeholder="offerPrice"
         min={0}
       />
-      <LabeledTextField name="coverImage" label="Cover Image" placeholder="URL of cover image" />
+      <LabeledTextField
+        name="coverImage"
+        label="Cover Image"
+        placeholder="https://images.unsplash.com/photo-..."
+        helperText="Tip: Right-click an image on Unsplash and choose 'Copy Image Address'"
+      />
     </Form>
   )
 }
