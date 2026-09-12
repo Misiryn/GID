@@ -16,7 +16,7 @@ import {
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 import getCategories from "app/categories/queries/getCategories"
-import { Badge } from "@nextui-org/react"
+import Badge from "app/core/components/Badge"
 
 const ITEMS_PER_PAGE = 12
 

@@ -1,6 +1,7 @@
 import { BlitzPage, Link, Routes, useQuery } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import { Button, Card, Container, Grid, Row, Spacer, Text, Badge } from "@nextui-org/react"
+import { Button, Card, Container, Grid, Row, Spacer, Text } from "@nextui-org/react"
+import Badge from "app/core/components/Badge"
 import getCategories from "app/categories/queries/getCategories"
 import getServices from "app/services/queries/getServices"
 import { Suspense } from "react"

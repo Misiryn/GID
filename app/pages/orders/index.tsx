@@ -7,7 +7,7 @@ import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 const ITEMS_PER_PAGE = 100
 
-import { Badge, User } from "@nextui-org/react"
+import Badge from "app/core/components/Badge"
 
 export const OrdersList = () => {
   const router = useRouter()
