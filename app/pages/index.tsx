@@ -55,37 +55,151 @@ const HomeContent = () => {
       <Spacer y={3} />
 
       {/* Trust & Guarantee Markers */}
-      <Card css={{ bg: "$accents1", p: "$8", my: "$10", borderRadius: "$lg" }}>
-        <Grid.Container gap={3} justify="space-around">
-          <Grid xs={12} sm={3} css={{ textAlign: "center" }}>
-            <Text css={{ fontSize: "2rem" }}>🛡️</Text>
-            <Text b css={{ fontSize: "$md" }}>Verified Experts</Text>
-            <Text css={{ color: "$accents7", fontSize: "$sm" }}>
+      <Card
+        css={{
+          bg: "$accents1",
+          p: "$8",
+          my: "$8",
+          borderRadius: "$xl",
+          border: "1px solid #282828",
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "24px",
+            alignItems: "stretch",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "8px",
+            }}
+          >
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "50%",
+                background: "rgba(255, 255, 255, 0.08)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.5rem",
+                marginBottom: "12px",
+              }}
+            >
+              🛡️
+            </div>
+            <Text b css={{ fontSize: "$md", mb: "$2" }}>
+              Verified Experts
+            </Text>
+            <Text css={{ color: "$accents7", fontSize: "$xs", lineHeight: "1.3rem", maxW: "190px" }}>
               100% background checked & professionally trained
             </Text>
-          </Grid>
-          <Grid xs={12} sm={3} css={{ textAlign: "center" }}>
-            <Text css={{ fontSize: "2rem" }}>🏷️</Text>
-            <Text b css={{ fontSize: "$md" }}>Fixed Transparent Rates</Text>
-            <Text css={{ color: "$accents7", fontSize: "$sm" }}>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "8px",
+            }}
+          >
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "50%",
+                background: "rgba(255, 255, 255, 0.08)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.5rem",
+                marginBottom: "12px",
+              }}
+            >
+              🏷️
+            </div>
+            <Text b css={{ fontSize: "$md", mb: "$2" }}>
+              Fixed Transparent Rates
+            </Text>
+            <Text css={{ color: "$accents7", fontSize: "$xs", lineHeight: "1.3rem", maxW: "190px" }}>
               Zero hidden charges. Pay after work satisfaction
             </Text>
-          </Grid>
-          <Grid xs={12} sm={3} css={{ textAlign: "center" }}>
-            <Text css={{ fontSize: "2rem" }}>⚡</Text>
-            <Text b css={{ fontSize: "$md" }}>Doorstep in 60 Mins</Text>
-            <Text css={{ color: "$accents7", fontSize: "$sm" }}>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "8px",
+            }}
+          >
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "50%",
+                background: "rgba(255, 255, 255, 0.08)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.5rem",
+                marginBottom: "12px",
+              }}
+            >
+              ⚡
+            </div>
+            <Text b css={{ fontSize: "$md", mb: "$2" }}>
+              Doorstep in 60 Mins
+            </Text>
+            <Text css={{ color: "$accents7", fontSize: "$xs", lineHeight: "1.3rem", maxW: "190px" }}>
               Pick your preferred date & time window
             </Text>
-          </Grid>
-          <Grid xs={12} sm={3} css={{ textAlign: "center" }}>
-            <Text css={{ fontSize: "2rem" }}>🔄</Text>
-            <Text b css={{ fontSize: "$md" }}>30-Day Guarantee</Text>
-            <Text css={{ color: "$accents7", fontSize: "$sm" }}>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "8px",
+            }}
+          >
+            <div
+              style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "50%",
+                background: "rgba(255, 255, 255, 0.08)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.5rem",
+                marginBottom: "12px",
+              }}
+            >
+              🔄
+            </div>
+            <Text b css={{ fontSize: "$md", mb: "$2" }}>
+              30-Day Guarantee
+            </Text>
+            <Text css={{ color: "$accents7", fontSize: "$xs", lineHeight: "1.3rem", maxW: "190px" }}>
               Free re-work if you are not fully satisfied
             </Text>
-          </Grid>
-        </Grid.Container>
+          </div>
+        </div>
       </Card>
 
       <Spacer y={2} />
