@@ -15,7 +15,15 @@ export default resolver.pipe(async ({ where, orderBy, skip = 0, take = 100 }: Ge
     skip,
     take,
     count: () => db.service.count({ where }),
-    query: (paginateArgs) => db.service.findMany({ ...paginateArgs, where, orderBy }),
+    query: (paginateArgs) =>
+      db.service.findMany({
+        ...paginateArgs,
+        where,
+        orderBy,
+        include: {
+          category: true,
+        },
+      }),
   })
 
   return {

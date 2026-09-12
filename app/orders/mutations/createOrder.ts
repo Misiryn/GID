@@ -7,9 +7,14 @@ export const CreateOrder = z.object({
   serviceDateTime: z.date(),
   createdBy: z.number(),
   total: z.number(),
-  isCompleted: z.boolean(),
+  isCompleted: z.boolean().default(false),
   address: z.string(),
-  is_paid: z.boolean(),
+  is_paid: z.boolean().default(false),
+  timeSlot: z.string().optional(),
+  status: z.string().optional(),
+  partnerName: z.string().optional(),
+  partnerRating: z.number().optional(),
+  paymentMethod: z.string().optional(),
 })
 
 export default resolver.pipe(
@@ -29,6 +34,11 @@ export default resolver.pipe(
             id: service,
           },
         },
+        timeSlot: input.timeSlot || "09:00 AM - 11:00 AM",
+        status: input.status || "CONFIRMED",
+        partnerName: input.partnerName || "Verified Professional",
+        partnerRating: input.partnerRating || 4.9,
+        paymentMethod: input.paymentMethod || "PAY_AFTER_SERVICE",
         ...input,
       },
     })

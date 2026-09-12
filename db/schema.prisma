@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -48,8 +48,6 @@ model Token {
   updatedAt   DateTime @updatedAt
   hashedToken String
   type        String
-  // See note below about TokenType enum
-  // type        TokenType
   expiresAt   DateTime
   sentTo      String
 
@@ -59,32 +57,49 @@ model Token {
   @@unique([hashedToken, type])
 }
 
-// NOTE: It's highly recommended to use an enum for the token type
-//       but enums only work in Postgres.
-//       See: https://blitzjs.com/docs/database-overview#switch-to-postgre-sql
-// enum TokenType {
-//   RESET_PASSWORD
-// }
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  icon        String?
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  services    Service[]
+}
 
 model Service {
-  id         Int      @id @default(autoincrement())
-  title      String
-  slug       String
-  details    String
-  price      Int
-  offerPrice Int
-  coverImage String
-  createdBy  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  userId     Int
-  Order      Order[]
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  details     String
+  price       Int
+  offerPrice  Int
+  coverImage  String
+  duration    String?   @default("60 mins")
+  rating      Float?    @default(4.8)
+  reviewCount Int?      @default(120)
+  inclusions  String?
+  exclusions  String?
+  badge       String?
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId  Int?
+  createdBy   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      Int
+  Order       Order[]
 }
 
 model Order {
   id              Int      @id @default(autoincrement())
   service         Service  @relation(fields: [serviceId], references: [id])
   serviceDateTime DateTime
+  timeSlot        String?  @default("09:00 AM - 11:00 AM")
+  status          String   @default("CONFIRMED")
+  partnerName     String?  @default("Verified Professional")
+  partnerRating   Float?   @default(4.9)
+  paymentMethod   String?  @default("PAY_AFTER_SERVICE")
   createdBy       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   total           Int
   isCompleted     Boolean  @default(false)

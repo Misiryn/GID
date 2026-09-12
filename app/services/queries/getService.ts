@@ -9,7 +9,10 @@ const GetService = z.object({
 
 export default resolver.pipe(resolver.zod(GetService), async ({ id }) => {
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const service = await db.service.findFirst({ where: { id } })
+  const service = await db.service.findFirst({
+    where: { id },
+    include: { category: true },
+  })
 
   if (!service) throw new NotFoundError()
 
