@@ -98,3 +98,10 @@ This log documents all major activities, configurations, server statuses, and bu
 ## [2026-09-12 15:36] Fix: Homepage Trust & Guarantee Markers Layout Alignment
 - **Problem**: NextUI's `Grid.Container` defaulted to flex-row wrapping inside individual grid items, causing icons, headings, and descriptions to smash together horizontally.
 - **Resolution**: Replaced with clean CSS grid layout (`repeat(auto-fit, minmax(200px, 1fr))`) with circular icon badges, bold centered titles, and nicely spaced subtitles.
+
+---
+
+## [2026-09-12 15:38] Fix: useQuery ReferenceError in services/index.tsx
+- **Problem**: `useQuery` was missing from the `blitz` imports in `app/pages/services/index.tsx`, throwing `ReferenceError: useQuery is not defined` when filtering categories.
+- **Resolution**: Added `useQuery` to the import list from `"blitz"` in `services/index.tsx`.
+- **Status**: Verified `http://localhost:3001/services?category=cleaning` renders with HTTP 200 OK.
