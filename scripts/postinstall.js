@@ -2,16 +2,68 @@ const fs = require("fs")
 const path = require("path")
 const { execSync } = require("child_process")
 
-console.log("Running postinstall script...")
+console.log("==> Running custom Prisma compatibility setup...")
 
-try {
-  console.log("Generating Prisma Client...")
-  execSync("npx prisma generate", { stdio: "inherit" })
-} catch (e) {
-  console.error("Prisma generate warning/error:", e.message)
+// 1. Patch all Prisma OpenSSL 3.x detections to resolve to 3.0.x
+function patchFile(filePath) {
+  if (!fs.existsSync(filePath)) return
+  try {
+    let content = fs.readFileSync(filePath, "utf8")
+    const re = /return\s+([a-zA-Z0-9_$]+\[1\])\s*\+\s*["']\.x["']/g
+    if (re.test(content)) {
+      content = content.replace(
+        re,
+        'return ($1 && String($1).startsWith("3.") ? "3.0.x" : $1 + ".x")'
+      )
+      fs.writeFileSync(filePath, content, "utf8")
+      console.log(`Patched OpenSSL 3.x detection in: ${filePath}`)
+    }
+  } catch (err) {
+    console.warn(`Could not patch ${filePath}:`, err.message)
+  }
 }
 
-// Copy query engine to match any OpenSSL 3.x variant on Linux (e.g. rhel-openssl-3.5.x)
+function walkAndPatch(dir) {
+  if (!fs.existsSync(dir)) return
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      walkAndPatch(fullPath)
+    } else if (entry.isFile() && (entry.name.endsWith(".js") || entry.name.endsWith(".cjs"))) {
+      patchFile(fullPath)
+    }
+  }
+}
+
+const targetDirs = [
+  path.join(__dirname, "../node_modules/prisma"),
+  path.join(__dirname, "../node_modules/@prisma"),
+]
+
+for (const dir of targetDirs) {
+  walkAndPatch(dir)
+}
+
+// 2. Set environment variables for Prisma CLI
+process.env.PRISMA_CLI_BINARY_TARGETS = "rhel-openssl-3.0.x,debian-openssl-3.0.x"
+
+// 3. Generate Prisma Client
+try {
+  console.log("==> Generating Prisma Client...")
+  execSync("npx prisma generate", {
+    stdio: "inherit",
+    env: {
+      ...process.env,
+      PRISMA_CLI_BINARY_TARGETS: "rhel-openssl-3.0.x,debian-openssl-3.0.x",
+    },
+  })
+} catch (e) {
+  console.error("Prisma generate error:", e.message)
+  process.exit(1)
+}
+
+// 4. Create compatibility copies for any potential OpenSSL version mismatches
 const searchDirs = [
   path.join(__dirname, "../node_modules/.prisma/client"),
   path.join(__dirname, "../node_modules/@prisma/client"),
@@ -33,8 +85,8 @@ searchDirs.forEach((dir) => {
       })
     }
   } catch (err) {
-    console.error(`Error in postinstall compatibility mapping for ${dir}:`, err.message)
+    console.error(`Error in compatibility copy for ${dir}:`, err.message)
   }
 })
 
-console.log("Postinstall completed successfully.")
+console.log("==> Prisma compatibility setup finished successfully!")

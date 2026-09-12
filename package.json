@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "NODE_OPTIONS=--openssl-legacy-provider blitz dev",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider blitz build",
+    "build": "node scripts/postinstall.js && NODE_OPTIONS=--openssl-legacy-provider blitz build",
     "start": "NODE_OPTIONS=--openssl-legacy-provider blitz start",
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
