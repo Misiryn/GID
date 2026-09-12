@@ -13,7 +13,7 @@ import {
 import Layout from "app/core/layouts/Layout"
 import getService from "app/services/queries/getService"
 import deleteService from "app/services/mutations/deleteService"
-import { Button, Container, Divider, Loading, Modal, Spacer, Text } from "@nextui-org/react"
+import { Button, Container, Divider, Loading, Modal, Spacer, Text, Grid, Card } from "@nextui-org/react"
 import { PaymentModal } from "app/services/components/PaymentModal"
 import createOrder from "app/orders/mutations/createOrder"
 import getCurrentUser from "app/users/queries/getCurrentUser"
@@ -120,7 +120,7 @@ export const Service = () => {
               {inclusionsList.length > 0 && (
                 <div style={{ marginTop: "1.5rem" }}>
                   <Text h3 css={{ fontSize: "1.3rem", mb: "$4" }}>
-                    ✅ What's Included
+                    ✅ What&apos;s Included
                   </Text>
                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     {inclusionsList.map((item, idx) => (
@@ -137,7 +137,7 @@ export const Service = () => {
               {exclusionsList.length > 0 && (
                 <div style={{ marginTop: "2rem" }}>
                   <Text h3 css={{ fontSize: "1.3rem", mb: "$4" }}>
-                    🚫 What's Excluded
+                    🚫 What&apos;s Excluded
                   </Text>
                   <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     {exclusionsList.map((item, idx) => (

@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getOrders from "app/orders/queries/getOrders"
-import { Spacer, Divider, Button, Text, Card, Container, Table } from "@nextui-org/react"
+import { Spacer, Divider, Button, Text, Card, Container, Table, Grid } from "@nextui-org/react"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 const ITEMS_PER_PAGE = 100
@@ -45,7 +45,7 @@ export const OrdersList = () => {
       <Card css={{ p: "$12", textAlign: "center", my: "$10" }}>
         <Text h3>No Bookings Yet</Text>
         <Text css={{ color: "$accents7", mb: "$6" }}>
-          You haven't scheduled any home services yet.
+          You haven&apos;t scheduled any home services yet.
         </Text>
         <Link href="/services">
           <Button auto color="primary" css={{ alignSelf: "center" }}>

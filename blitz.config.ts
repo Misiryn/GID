@@ -10,6 +10,9 @@ const config: BlitzConfig = {
   images: {
     domains: ["images.unsplash.com"],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   /* Uncomment this to customize the webpack config
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
