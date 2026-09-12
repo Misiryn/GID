@@ -85,3 +85,10 @@ This log documents all major activities, configurations, server statuses, and bu
 ## [2026-09-12 15:23] Server & Prisma Studio Shutdown
 - **Action**: Gracefully stopped Blitz development server (port 3001) and Prisma Studio (port 5555).
 - **Status**: All background tasks terminated; ports released.
+
+---
+
+## [2026-09-12 15:27] Fix: Element Type Invalid Runtime Error (Missing NextUI Badge)
+- **Problem**: NextUI v1.0.0-beta.9 does not export a `Badge` component, causing `Element type is invalid: expected a string... but got: undefined` on `HomeContent`.
+- **Resolution**: Created a dedicated `Badge` component in `app/core/components/Badge.tsx` with color presets (primary, success, warning, error, secondary), and updated imports in `index.tsx`, `services/index.tsx`, and `orders/index.tsx`.
+- **Status**: Verified all pages compile and render cleanly with HTTP 200 OK.
