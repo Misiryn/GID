@@ -7,7 +7,8 @@ interface GetServicesInput
 }
 
 export default resolver.pipe(
-  async ({ id, where, orderBy, skip = 0, take = 100 }: GetServicesInput) => {
+  async (input: GetServicesInput = {}) => {
+    const { id, where, orderBy, skip = 0, take = 100 } = input || {}
     if (id) {
       const service = await db.service.findFirst({
         where: { id },

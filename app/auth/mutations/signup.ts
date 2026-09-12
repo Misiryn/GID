@@ -2,6 +2,9 @@ import { resolver, SecurePassword } from "blitz"
 import db from "db"
 import { Signup } from "app/auth/validations"
 import { Role } from "types"
+import { authMiddleware } from "app/core/middleware"
+
+export const middleware = [authMiddleware]
 
 export default resolver.pipe(resolver.zod(Signup), async ({ email, password, name }, ctx) => {
   const hashedPassword = await SecurePassword.hash(password.trim())

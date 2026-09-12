@@ -1,6 +1,9 @@
 import { resolver } from "blitz"
 import db from "db"
 import StripeConstructor from "stripe"
+import { authMiddleware } from "app/core/middleware"
+
+export const middleware = [authMiddleware]
 
 const stripe = new StripeConstructor(
   "sk_test_51Gw3jiEnwVW1SW8r1KnmeTfRNkNWJOFOfnOGIfLjvzeTBTLkJx7g2CE4jGQiSBSTGcTRKskkemuXqQxKkHggrBxK00b1aB0HWn",

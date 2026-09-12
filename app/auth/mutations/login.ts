@@ -20,6 +20,10 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
   return rest
 }
 
+import { authMiddleware } from "app/core/middleware"
+
+export const middleware = [authMiddleware]
+
 export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ctx) => {
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)

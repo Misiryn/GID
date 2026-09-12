@@ -1,5 +1,8 @@
 import { resolver } from "blitz"
 import db from "db"
+import { authMiddleware } from "app/core/middleware"
+
+export const middleware = [authMiddleware]
 
 export default resolver.pipe(
   resolver.authorize(),
