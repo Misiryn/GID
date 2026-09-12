@@ -1,44 +1,28 @@
-import { BlitzPage, useMutation } from "blitz"
+import { BlitzPage, Link, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
-import { ForgotPassword } from "app/auth/validations"
-import forgotPassword from "app/auth/mutations/forgotPassword"
+import { Card, Text, Button, Spacer } from "@nextui-org/react"
 
 const ForgotPasswordPage: BlitzPage = () => {
-  const [forgotPasswordMutation, { isSuccess }] = useMutation(forgotPassword)
-
   return (
-    <div>
-      <h1>Forgot your password?</h1>
-
-      {isSuccess ? (
-        <div>
-          <h2>Request Submitted</h2>
-          <p>
-            If your email is in our system, you will receive instructions to reset your password
-            shortly.
-          </p>
-        </div>
-      ) : (
-        <Form
-          submitText="Send Reset Password Instructions"
-          schema={ForgotPassword}
-          initialValues={{ email: "" }}
-          onSubmit={async (values) => {
-            try {
-              await forgotPasswordMutation(values)
-            } catch (error: any) {
-              return {
-                [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
-              }
-            }
-          }}
-        >
-          <LabeledTextField name="email" label="Email" placeholder="Email" />
-        </Form>
-      )}
-    </div>
+    <Card css={{ maxWidth: "500px", mx: "auto", my: "$16", p: "$10" }}>
+      <Text h3>Forgot your password?</Text>
+      <Text css={{ color: "$accents7", my: "$4" }}>
+        This instance is connected to Supabase PostgreSQL with preconfigured demo accounts:
+      </Text>
+      <div style={{ background: "#111", padding: "12px", borderRadius: "8px", marginBottom: "16px" }}>
+        <Text b css={{ display: "block", fontSize: "$sm" }}>
+          Admin: admin@example.com / AdminPassword123!
+        </Text>
+        <Text b css={{ display: "block", fontSize: "$sm", mt: "$2" }}>
+          User: rahul@example.com / UserPassword123!
+        </Text>
+      </div>
+      <Link href={Routes.LoginPage()}>
+        <Button as="a" color="primary" auto>
+          Back to Login
+        </Button>
+      </Link>
+    </Card>
   )
 }
 

@@ -13,7 +13,7 @@ import React, { FormEvent, useState } from "react"
 
 import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
-import paymentMutation from "../../mutations/stripe"
+import mutateOrder from "app/orders/mutations/mutateOrder"
 import { useMutation } from "blitz"
 
 const stripePromise = loadStripe(
@@ -36,7 +36,7 @@ interface Props {
 export const BookingForm = ({ total, handleClose, onSuccess }: Props) => {
   const stripe = useStripe()
   const elements = useElements()
-  const [processPayment, { isLoading }] = useMutation(paymentMutation)
+  const [mutateOrderMutation, { isLoading }] = useMutation(mutateOrder)
 
   const [date, setDate] = useState(() => {
     const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -80,10 +80,10 @@ export const BookingForm = ({ total, handleClose, onSuccess }: Props) => {
     setIsSubmitting(true)
     const { token } = await stripe.createToken(cardElement)
     if (token) {
-      await processPayment(
-        { total, token: token.id },
+      await mutateOrderMutation(
+        { action: "stripe", data: { total, token: token.id } },
         {
-          onSuccess(data) {
+          onSuccess(data: any) {
             onSuccess &&
               onSuccess({
                 address,

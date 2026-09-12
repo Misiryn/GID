@@ -1,55 +1,20 @@
-import { BlitzPage, useRouterQuery, Link, useMutation, Routes } from "blitz"
+import { BlitzPage, Link, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
-import { ResetPassword } from "app/auth/validations"
-import resetPassword from "app/auth/mutations/resetPassword"
+import { Card, Text, Button } from "@nextui-org/react"
 
 const ResetPasswordPage: BlitzPage = () => {
-  const query = useRouterQuery()
-  const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword)
-
   return (
-    <div>
-      <h1>Set a New Password</h1>
-
-      {isSuccess ? (
-        <div>
-          <h2>Password Reset Successfully</h2>
-          <p>
-            Go to the <Link href={Routes.Home()}>homepage</Link>
-          </p>
-        </div>
-      ) : (
-        <Form
-          submitText="Reset Password"
-          schema={ResetPassword}
-          initialValues={{ password: "", passwordConfirmation: "", token: query.token as string }}
-          onSubmit={async (values) => {
-            try {
-              await resetPasswordMutation(values)
-            } catch (error: any) {
-              if (error.name === "ResetPasswordError") {
-                return {
-                  [FORM_ERROR]: error.message,
-                }
-              } else {
-                return {
-                  [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
-                }
-              }
-            }
-          }}
-        >
-          <LabeledTextField name="password" label="New Password" type="password" />
-          <LabeledTextField
-            name="passwordConfirmation"
-            label="Confirm New Password"
-            type="password"
-          />
-        </Form>
-      )}
-    </div>
+    <Card css={{ maxWidth: "500px", mx: "auto", my: "$16", p: "$10" }}>
+      <Text h3>Password Reset</Text>
+      <Text css={{ color: "$accents7", my: "$4" }}>
+        Password reset tokens are managed via the authentication dashboard. Please sign in with your credentials.
+      </Text>
+      <Link href={Routes.LoginPage()}>
+        <Button as="a" color="primary" auto>
+          Back to Login
+        </Button>
+      </Link>
+    </Card>
   )
 }
 

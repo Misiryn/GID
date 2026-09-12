@@ -6,11 +6,11 @@ import Form, { FORM_ERROR } from "app/core/components/Form"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import LabeledTextField from "app/core/components/LabeledTextField"
 import { Suspense } from "react"
-import updateUser from "app/users/mutations/updateUser"
+import mutateUser from "app/users/mutations/mutateUser"
 
 const Profile: BlitzPage = () => {
   const currentUser = useCurrentUser()
-  const [updateUserMutation] = useMutation(updateUser)
+  const [mutateUserMutation] = useMutation(mutateUser)
   return (
     <Container>
       <Card
@@ -30,9 +30,10 @@ const Profile: BlitzPage = () => {
           onSubmit={async (values) => {
             try {
               if (currentUser?.id) {
-                await updateUserMutation({
+                await mutateUserMutation({
+                  action: "update",
                   id: currentUser?.id,
-                  name: values.name,
+                  data: { name: values.name },
                 })
 
                 window.location.reload()

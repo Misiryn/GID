@@ -5,7 +5,7 @@ import { Spacer, Divider, Button, Text, Container, Table } from "@nextui-org/rea
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import { User } from "@prisma/client"
 import getUsers from "app/users/queries/getUsers"
-import deleteUser from "app/users/mutations/deleteUser"
+import mutateUser from "app/users/mutations/mutateUser"
 
 const ITEMS_PER_PAGE = 100
 
@@ -18,7 +18,7 @@ export const AdminUsersList = () => {
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
-  const [deleteUserMutation] = useMutation(deleteUser)
+  const [mutateUserMutation] = useMutation(mutateUser)
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
   const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
@@ -54,7 +54,8 @@ export const AdminUsersList = () => {
                   onClick={async () => {
                     const sure = confirm("Are you sure you want to delete this order?")
                     if (sure) {
-                      await deleteUserMutation({ id: user.id })
+                      await mutateUserMutation({ action: "delete", id: user.id })
+                      refetch()
                     }
                   }}
                 >

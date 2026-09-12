@@ -5,7 +5,7 @@ import { Spacer, Divider, Button, Text, Container, Table, Grid } from "@nextui-o
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import getServices from "app/services/queries/getServices"
 import { Service } from "@prisma/client"
-import deleteService from "app/services/mutations/deleteService"
+import mutateService from "app/services/mutations/mutateService"
 
 const ITEMS_PER_PAGE = 100
 
@@ -18,7 +18,7 @@ export const AdminServices = () => {
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
-  const [deleteServiceMutation] = useMutation(deleteService)
+  const [mutateServiceMutation] = useMutation(mutateService)
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
   const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
@@ -63,7 +63,8 @@ export const AdminServices = () => {
                   onClick={async () => {
                     const sure = confirm("Are you sure you want to delete this order?")
                     if (sure) {
-                      await deleteServiceMutation({ id: service.id })
+                      await mutateServiceMutation({ action: "delete", id: service.id })
+                      refetch()
                     }
                   }}
                 >

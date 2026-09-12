@@ -4,8 +4,7 @@ import Layout from "app/core/layouts/Layout"
 import getOrders from "app/orders/queries/getOrders"
 import { Spacer, Divider, Button, Text, Card, Container, Table } from "@nextui-org/react"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
-import updateOrder from "app/orders/mutations/updateOrder"
-import deleteOrder from "app/orders/mutations/deleteOrder"
+import mutateOrder from "app/orders/mutations/mutateOrder"
 
 const ITEMS_PER_PAGE = 100
 
@@ -18,9 +17,7 @@ export const AdminOrders = () => {
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
-  // mutationt to update order
-  const [updateOrderMutation] = useMutation(updateOrder)
-  const [deleteOrderMutation] = useMutation(deleteOrder)
+  const [mutateOrderMutation] = useMutation(mutateOrder)
   const goToPreviousPage = () => router.push({ query: { page: page - 1 } })
   const goToNextPage = () => router.push({ query: { page: page + 1 } })
 
@@ -53,7 +50,11 @@ export const AdminOrders = () => {
                   <Button
                     size="xs"
                     onClick={async () => {
-                      await updateOrderMutation({ ...order, isCompleted: true })
+                      await mutateOrderMutation({
+                        action: "update",
+                        id: order.id,
+                        data: { isCompleted: true, status: "COMPLETED" },
+                      })
                       refetch()
                     }}
                   >
@@ -68,7 +69,7 @@ export const AdminOrders = () => {
                   onClick={async () => {
                     const sure = confirm("Are you sure you want to delete this order?")
                     if (sure) {
-                      await deleteOrderMutation({ id: order.id })
+                      await mutateOrderMutation({ action: "delete", id: order.id })
                       refetch()
                     }
                   }}

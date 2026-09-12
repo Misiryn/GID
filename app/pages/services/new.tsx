@@ -1,6 +1,6 @@
 import { Link, useRouter, useMutation, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import createService from "app/services/mutations/createService"
+import mutateService from "app/services/mutations/mutateService"
 import { ServiceForm, FORM_ERROR } from "app/services/components/ServiceForm"
 import { Card, Loading, Text } from "@nextui-org/react"
 import { CreateService } from "app/services/validation"
@@ -9,7 +9,7 @@ import { Suspense } from "react"
 
 const NewServicePage: BlitzPage = () => {
   const router = useRouter()
-  const [createServiceMutation] = useMutation(createService)
+  const [mutateServiceMutation] = useMutation(mutateService)
   const currentUser = useCurrentUser()
   return (
     <Card
@@ -44,7 +44,7 @@ const NewServicePage: BlitzPage = () => {
             if (values.createdBy < 0) {
               throw new Error("Invalid User")
             }
-            const service = await createServiceMutation({ ...values })
+            const service: any = await mutateServiceMutation({ action: "create", data: values })
             router.push(Routes.ShowServicePage({ serviceId: service.id }))
           } catch (error: any) {
             console.error(error)

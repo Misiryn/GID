@@ -11,21 +11,21 @@ import {
   Routes,
 } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import getService from "app/services/queries/getService"
-import deleteService from "app/services/mutations/deleteService"
+import getServices from "app/services/queries/getServices"
+import mutateService from "app/services/mutations/mutateService"
 import { Button, Container, Divider, Loading, Modal, Spacer, Text, Grid, Card } from "@nextui-org/react"
 import { PaymentModal } from "app/services/components/PaymentModal"
-import createOrder from "app/orders/mutations/createOrder"
+import mutateOrder from "app/orders/mutations/mutateOrder"
 import getCurrentUser from "app/users/queries/getCurrentUser"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 
 export const Service = () => {
   const router = useRouter()
   const serviceId = useParam("serviceId", "number")
-  const [deleteServiceMutation] = useMutation(deleteService)
-  const [createOrderMutation] = useMutation(createOrder)
+  const [mutateServiceMutation] = useMutation(mutateService)
+  const [mutateOrderMutation] = useMutation(mutateOrder)
   const currentUser = useCurrentUser()
-  const [service] = useQuery(getService, { id: serviceId })
+  const [service] = useQuery(getServices, { id: serviceId })
   const [isOpen, setIsOpen] = useState(false)
   const discount =
     service.price > service.offerPrice
@@ -46,20 +46,23 @@ export const Service = () => {
         total={service.offerPrice}
         onSuccess={async ({ address, paymentId, serviceDateTime, timeSlot, paymentMethod }) => {
           currentUser?.id &&
-            createOrderMutation(
+            mutateOrderMutation(
               {
-                service: service.id,
-                address,
-                createdBy: currentUser?.id,
-                is_paid: paymentMethod === "ONLINE",
-                isCompleted: false,
-                serviceDateTime: new Date(serviceDateTime),
-                timeSlot,
-                status: "CONFIRMED",
-                partnerName: "Verified Expert Partner",
-                partnerRating: 4.9,
-                paymentMethod,
-                total: service.offerPrice,
+                action: "create",
+                data: {
+                  service: service.id,
+                  address,
+                  createdBy: currentUser?.id,
+                  is_paid: paymentMethod === "ONLINE",
+                  isCompleted: false,
+                  serviceDateTime: new Date(serviceDateTime),
+                  timeSlot,
+                  status: "CONFIRMED",
+                  partnerName: "Verified Expert Partner",
+                  partnerRating: 4.9,
+                  paymentMethod,
+                  total: service.offerPrice,
+                },
               },
               {
                 onSuccess() {
@@ -268,7 +271,7 @@ export const Service = () => {
                       color="error"
                       onClick={async () => {
                         if (window.confirm("Delete this service?")) {
-                          await deleteServiceMutation({ id: service.id })
+                          await mutateServiceMutation({ action: "delete", id: service.id })
                           router.push("/services")
                         }
                       }}

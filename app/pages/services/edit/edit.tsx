@@ -1,8 +1,8 @@
 import { Suspense } from "react"
 import { Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import getService from "app/services/queries/getService"
-import updateService from "app/services/mutations/updateService"
+import getServices from "app/services/queries/getServices"
+import mutateService from "app/services/mutations/mutateService"
 import { ServiceForm, FORM_ERROR } from "app/services/components/ServiceForm"
 import { Card, Text } from "@nextui-org/react"
 
@@ -10,14 +10,14 @@ export const EditService = () => {
   const router = useRouter()
   const serviceId = useParam("serviceId", "number")
   const [service, { setQueryData }] = useQuery(
-    getService,
+    getServices,
     { id: serviceId },
     {
       // This ensures the query never refreshes and overwrites the form data while the user is editing.
       staleTime: Infinity,
     }
   )
-  const [updateServiceMutation] = useMutation(updateService)
+  const [mutateServiceMutation] = useMutation(mutateService)
 
   return (
     <>
@@ -44,9 +44,10 @@ export const EditService = () => {
           initialValues={service}
           onSubmit={async (values) => {
             try {
-              const updated = await updateServiceMutation({
+              const updated: any = await mutateServiceMutation({
+                action: "update",
                 id: service.id,
-                ...values,
+                data: values,
               })
               await setQueryData(updated)
               router.push(Routes.ShowServicePage({ serviceId: updated.id }))
