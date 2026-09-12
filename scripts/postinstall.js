@@ -4,19 +4,45 @@ const { execSync } = require("child_process")
 
 console.log("==> Running custom Prisma compatibility setup...")
 
-// 1. Patch all Prisma OpenSSL 3.x detections to resolve to 3.0.x
+process.env.PRISMA_HIDE_UPDATE_MESSAGE = "true"
+process.env.PRISMA_CLI_BINARY_TARGETS = "rhel-openssl-3.0.x,debian-openssl-3.0.x"
+
+// 1. Patch all Prisma OpenSSL 3.x detections and repeat(-2) crash
 function patchFile(filePath) {
   if (!fs.existsSync(filePath)) return
   try {
     let content = fs.readFileSync(filePath, "utf8")
-    const re = /return\s+([a-zA-Z0-9_$]+\[1\])\s*\+\s*["']\.x["']/g
-    if (re.test(content)) {
+    let modified = false
+
+    // Fix OpenSSL 3.x detection to use 3.0.x
+    const reOpenSSL = /return\s+([a-zA-Z0-9_$]+\[1\])\s*\+\s*["']\.x["']/g
+    if (reOpenSSL.test(content)) {
       content = content.replace(
-        re,
+        reOpenSSL,
         'return ($1 && String($1).startsWith("3.") ? "3.0.x" : $1 + ".x")'
       )
+      modified = true
+    }
+
+    // Fix drawBox repeat negative count crash
+    if (content.includes("chars.horizontal.repeat(width - title.length - 2 - 3)")) {
+      content = content.replace(
+        "chars.horizontal.repeat(width - title.length - 2 - 3)",
+        "chars.horizontal.repeat(Math.max(0, width - title.length - 2 - 3))"
+      )
+      modified = true
+    }
+    if (content.includes("chars.horizontal.repeat(width - 2)")) {
+      content = content.replace(
+        "chars.horizontal.repeat(width - 2)",
+        "chars.horizontal.repeat(Math.max(0, width - 2))"
+      )
+      modified = true
+    }
+
+    if (modified) {
       fs.writeFileSync(filePath, content, "utf8")
-      console.log(`Patched OpenSSL 3.x detection in: ${filePath}`)
+      console.log(`Patched: ${filePath}`)
     }
   } catch (err) {
     console.warn(`Could not patch ${filePath}:`, err.message)
@@ -45,25 +71,29 @@ for (const dir of targetDirs) {
   walkAndPatch(dir)
 }
 
-// 2. Set environment variables for Prisma CLI
-process.env.PRISMA_CLI_BINARY_TARGETS = "rhel-openssl-3.0.x,debian-openssl-3.0.x"
-
-// 3. Generate Prisma Client
+// 2. Generate Prisma Client
 try {
   console.log("==> Generating Prisma Client...")
   execSync("npx prisma generate", {
     stdio: "inherit",
     env: {
       ...process.env,
+      PRISMA_HIDE_UPDATE_MESSAGE: "true",
       PRISMA_CLI_BINARY_TARGETS: "rhel-openssl-3.0.x,debian-openssl-3.0.x",
     },
   })
 } catch (e) {
-  console.error("Prisma generate error:", e.message)
-  process.exit(1)
+  console.warn("Prisma generate exited with notice:", e.message)
+  const clientExists = fs.existsSync(
+    path.join(__dirname, "../node_modules/.prisma/client/index.js")
+  )
+  if (!clientExists) {
+    console.error("Prisma client was not generated!")
+    process.exit(1)
+  }
 }
 
-// 4. Create compatibility copies for any potential OpenSSL version mismatches
+// 3. Create compatibility copies for any potential OpenSSL version mismatches
 const searchDirs = [
   path.join(__dirname, "../node_modules/.prisma/client"),
   path.join(__dirname, "../node_modules/@prisma/client"),
