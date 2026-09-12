@@ -79,3 +79,9 @@ This log documents all major activities, configurations, server statuses, and bu
   - **Booking Modal**: Service date picker, morning/afternoon/evening time slots, address capture, and "Pay After Service" toggle.
   - **My Bookings**: Modern booking cards with scheduled slot, assigned professional card, and live status badge.
 - **Verification**: Dev server (`http://localhost:3001`) and Prisma Studio (`http://localhost:5555`) verified running cleanly with Supabase.
+
+---
+
+## [2026-09-12 15:23] Server & Prisma Studio Shutdown
+- **Action**: Gracefully stopped Blitz development server (port 3001) and Prisma Studio (port 5555).
+- **Status**: All background tasks terminated; ports released.
