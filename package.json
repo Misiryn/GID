@@ -9,7 +9,7 @@
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prepare": "husky install"
+    "prepare": "husky install || true"
   },
   "prisma": {
     "schema": "db/schema.prisma"
@@ -48,6 +48,9 @@
     "preview-email": "3.0.7",
     "prisma": "3.16.0-integration-tmp-revert-node14.1",
     "typescript": "~4.5"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "private": true
 }
