@@ -92,3 +92,9 @@ This log documents all major activities, configurations, server statuses, and bu
 - **Problem**: NextUI v1.0.0-beta.9 does not export a `Badge` component, causing `Element type is invalid: expected a string... but got: undefined` on `HomeContent`.
 - **Resolution**: Created a dedicated `Badge` component in `app/core/components/Badge.tsx` with color presets (primary, success, warning, error, secondary), and updated imports in `index.tsx`, `services/index.tsx`, and `orders/index.tsx`.
 - **Status**: Verified all pages compile and render cleanly with HTTP 200 OK.
+
+---
+
+## [2026-09-12 15:36] Fix: Homepage Trust & Guarantee Markers Layout Alignment
+- **Problem**: NextUI's `Grid.Container` defaulted to flex-row wrapping inside individual grid items, causing icons, headings, and descriptions to smash together horizontally.
+- **Resolution**: Replaced with clean CSS grid layout (`repeat(auto-fit, minmax(200px, 1fr))`) with circular icon badges, bold centered titles, and nicely spaced subtitles.
