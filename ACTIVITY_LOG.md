@@ -1,6 +1,6 @@
 # Activity Log - Get It Done (GID)
 
-This log documents all activities, system configurations, and bug fixes for the project.
+This log documents all major activities, configurations, server statuses, and bug fixes for the project.
 
 ---
 
@@ -44,7 +44,6 @@ This log documents all activities, system configurations, and bug fixes for the 
 
 ## [2026-09-12 13:48] Fix: Next.js Image Hostname Restriction (400 Error)
 - **Problem**: Creating a service with an external image URL resulted in Next.js runtime error: `hostname "www.istockphoto.com" is not configured under images in your blitz.config.js`.
-- **Root Cause**: `app/pages/services/[serviceId].tsx` used Next.js `<Image>` component which strictly forbids unlisted image hostnames.
 - **Resolution**:
   - Replaced `<Image>` with a responsive standard `<img>` element in `[serviceId].tsx`.
   - Fixed crash on `/services/1` without restricting which image domains users can supply.
@@ -52,13 +51,31 @@ This log documents all activities, system configurations, and bug fixes for the 
 ---
 
 ## [2026-09-12 14:13] Fix & Enhancement: Image URLs & Fallbacks
-- **Problem**: User entered Unsplash webpage URL (`https://unsplash.com/photos/person-reaching-from-car-window-mOi4khLZuU4`) which rendered broken because it is an HTML webpage rather than a direct image file.
+- **Problem**: User entered Unsplash webpage URL (`https://unsplash.com/photos/...`) which rendered broken because it is an HTML webpage rather than a direct image file.
 - **Resolution**:
-  1. **Form Validation (`app/services/validation.ts`)**:
-     - Added Zod refinement detecting Unsplash and iStockphoto webpage URLs, displaying a friendly prompt explaining how to copy the direct image address.
-  2. **Form UX (`app/services/components/ServiceForm.tsx` & `LabeledTextField.tsx`)**:
-     - Added helper text tip explaining how to copy direct image addresses.
-     - Updated placeholder to show example direct image URL.
-  3. **Graceful Fallback (`[serviceId].tsx` & `services/index.tsx`)**:
-     - Added `onError` fallback handlers to both single service view and catalog cards.
-     - Automatically renders a clean placeholder image if an image URL fails to load.
+  1. **Form Validation (`app/services/validation.ts`)**: Added Zod refinement detecting Unsplash and iStockphoto webpage URLs, displaying a friendly prompt.
+  2. **Form UX (`app/services/components/ServiceForm.tsx` & `LabeledTextField.tsx`)**: Added helper text tip explaining how to copy direct image addresses.
+  3. **Graceful Fallback (`[serviceId].tsx` & `services/index.tsx`)**: Added `onError` fallback handlers rendering a clean placeholder image if any URL fails to load.
+
+---
+
+## [2026-09-12 15:22] Urban Company Transformation & Supabase Cloud Integration
+- **Branch**: Created dedicated review branch `feature/urban-company-transformation`.
+- **Database Migration to Supabase**:
+  - Connected live to Supabase PostgreSQL: `db.gkerjwgxlptgwmvfxlfw.supabase.co:5432`.
+  - Created `Category` entity with 1:N relation to `Service`.
+  - Extended `Service` model with `duration`, `rating`, `reviewCount`, `inclusions`, `exclusions`, `badge`.
+  - Extended `Order` model with `timeSlot`, `status`, `partnerName`, `partnerRating`, `paymentMethod`.
+  - Pushed schema to Supabase via `npx prisma db push`.
+- **Curated Marketplace Seed Data**:
+  - Seeded 5 core categories (🧹 Cleaning, ❄️ AC & Appliances, ⚡ Repairs, 💇‍♀️ Women's Salon, 💈 Men's Grooming).
+  - Seeded 13 realistic Indian household services with realistic market prices (₹199 - ₹2,499), durations, checklists, and high-res Unsplash photos.
+  - Seeded Admin (`admin@example.com`) and Customer (`rahul@example.com` / `UserPassword123!`).
+  - Seeded realistic sample bookings across `CONFIRMED`, `IN_PROGRESS`, and `COMPLETED` statuses.
+- **UI & Experience Overhaul**:
+  - **Homepage**: Urban Company hero banner, Category Grid, Trust Guarantees, and Most Booked Services.
+  - **Services Catalog**: Category Pill Filters (instant filtering), rating, duration, and discount badges.
+  - **Service Detail Page**: Inclusions checklist, Exclusions checklist, 3-step How It Works, and sticky booking card.
+  - **Booking Modal**: Service date picker, morning/afternoon/evening time slots, address capture, and "Pay After Service" toggle.
+  - **My Bookings**: Modern booking cards with scheduled slot, assigned professional card, and live status badge.
+- **Verification**: Dev server (`http://localhost:3001`) and Prisma Studio (`http://localhost:5555`) verified running cleanly with Supabase.
