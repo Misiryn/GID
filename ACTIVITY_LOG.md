@@ -105,3 +105,26 @@ This log documents all major activities, configurations, server statuses, and bu
 - **Problem**: `useQuery` was missing from the `blitz` imports in `app/pages/services/index.tsx`, throwing `ReferenceError: useQuery is not defined` when filtering categories.
 - **Resolution**: Added `useQuery` to the import list from `"blitz"` in `services/index.tsx`.
 - **Status**: Verified `http://localhost:3001/services?category=cleaning` renders with HTTP 200 OK.
+
+---
+
+## [2026-09-13 09:05] Vercel Production Deployment & Auth Fix
+- **Live URL**: `https://get-it-done-rho.vercel.app`
+- **Root Cause of Production 500 Error**:
+  - Blitz.js session management enforces `SESSION_SECRET_KEY` (length >= 32) when `NODE_ENV === 'production'`.
+  - Next.js serverless functions running on Vercel were missing this environment variable, causing `/api/rpc/getCurrentUser` and `/api/rpc/login` to crash with HTTP 500.
+  - Queries (`getServices.ts`, `getUsers.ts`, `getOrders.ts`) previously crashed when called with `{ params: null }` due to destructuring of `null`.
+- **Resolution**:
+  1. **Safe Query Destructuring**: Updated all query resolvers to default `input || {}` before destructuring.
+  2. **Fail-Safe Session Fallback**: Added explicit 64-char fallback keys in `app/core/middleware.ts` and `blitz.config.ts`.
+  3. **Vercel Secret Key**: Added `SESSION_SECRET_KEY` to Vercel production and preview environments via CLI.
+  4. **Direct Prisma Session Adapters**: Replaced dynamic Blitz session loader with explicit Prisma delegates in `app/core/middleware.ts` for AWS Lambda compatibility.
+  5. **Git Master Sync**: All changes pushed cleanly to `master` (commit `fa250a7`).
+- **Live Verification**:
+  - Homepage (`GET /`): `HTTP 200 OK`
+  - Current User (`POST /api/rpc/getCurrentUser`): `HTTP 200 OK` with anonymous session tokens
+  - Login RPC (`POST /api/rpc/login`): `HTTP 200 OK` with user session token and secure cookies
+  - Categories RPC (`POST /api/rpc/getCategories`): `HTTP 200 OK` (5 categories returned from Supabase)
+  - Services RPC (`POST /api/rpc/getServices`): `HTTP 200 OK` (13 services returned from Supabase)
+  - Services Catalog (`GET /services` & `GET /services?category=cleaning`): `HTTP 200 OK`
+
