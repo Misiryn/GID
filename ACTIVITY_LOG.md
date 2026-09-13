@@ -128,3 +128,20 @@ This log documents all major activities, configurations, server statuses, and bu
   - Services RPC (`POST /api/rpc/getServices`): `HTTP 200 OK` (13 services returned from Supabase)
   - Services Catalog (`GET /services` & `GET /services?category=cleaning`): `HTTP 200 OK`
 
+---
+
+## [2026-09-13 09:32] Fix: Vercel Functions Storage Exceeded & Lambda Size Reduction
+- **Problem**: Vercel Functions Storage reached 11.19 GB, exceeding the 10 GB Hobby limit.
+- **Root Causes**:
+  1. Accumulated 18 historical deployments retaining serverless function bundles.
+  2. `scripts/postinstall.js` was creating 3 duplicate copies of the 40.6 MB Prisma engine (`rhel-openssl-3.1.x`, `3.2.x`, `3.5.x`), bloating `.prisma/client` by 122 MB.
+  3. `db/schema.prisma` was generating unused engine binary targets (`rhel-openssl-1.0.x`, `debian-openssl-1.1.x`), adding another 84 MB of dead Linux binaries.
+- **Resolution**:
+  1. **Cleaned Historical Deployments**: Deleted 17 old, inactive, and errored deployments via Vercel API, retaining only the latest active production deployment.
+  2. **Eliminated Binary Duplication**: Removed the redundant compatibility copies in `scripts/postinstall.js`.
+  3. **Optimized binaryTargets**: Streamlined `schema.prisma` to `["native", "rhel-openssl-3.0.x"]`, reducing `.prisma/client` from 264 MB down to 68 MB (-74%).
+  4. **Reduced Function Size**: Decreased each lambda function from 103.3 MB to 91.6 MB.
+  5. **Total Storage Reduction**: Reduced overall project functions storage from 11.19 GB to ~1.00 GB (~91% reduction), well under the 10 GB limit.
+- **Verification**:
+  - Live production deployment (`dpl_5SXjuo7a6qDhMsmPMAT4NteYjrZP`) is `Ready` and serving [https://get-it-done-rho.vercel.app](https://get-it-done-rho.vercel.app).
+  - All RPCs (`getCategories`, `getServices`, `getCurrentUser`, `login`) verified returning HTTP 200 OK.
