@@ -5,7 +5,6 @@ const { execSync } = require("child_process")
 console.log("==> Running custom Prisma compatibility setup...")
 
 process.env.PRISMA_HIDE_UPDATE_MESSAGE = "true"
-process.env.PRISMA_CLI_BINARY_TARGETS = "rhel-openssl-3.0.x,debian-openssl-3.0.x"
 
 // 1. Patch all Prisma OpenSSL 3.x detections and repeat(-2) crash
 function patchFile(filePath) {
@@ -79,7 +78,6 @@ try {
     env: {
       ...process.env,
       PRISMA_HIDE_UPDATE_MESSAGE: "true",
-      PRISMA_CLI_BINARY_TARGETS: "rhel-openssl-3.0.x,debian-openssl-3.0.x",
     },
   })
 } catch (e) {
@@ -92,31 +90,5 @@ try {
     process.exit(1)
   }
 }
-
-// 3. Create compatibility copies for any potential OpenSSL version mismatches
-const searchDirs = [
-  path.join(__dirname, "../node_modules/.prisma/client"),
-  path.join(__dirname, "../node_modules/@prisma/client"),
-]
-
-searchDirs.forEach((dir) => {
-  if (!fs.existsSync(dir)) return
-  try {
-    const files = fs.readdirSync(dir)
-    const rhel30 = files.find((f) => f.includes("rhel-openssl-3.0.x"))
-    if (rhel30) {
-      const src = path.join(dir, rhel30)
-      ;["rhel-openssl-3.5.x", "rhel-openssl-3.2.x", "rhel-openssl-3.1.x"].forEach((target) => {
-        const dest = path.join(dir, rhel30.replace("rhel-openssl-3.0.x", target))
-        if (!fs.existsSync(dest)) {
-          fs.copyFileSync(src, dest)
-          console.log(`Created compatibility copy: ${dest}`)
-        }
-      })
-    }
-  } catch (err) {
-    console.error(`Error in compatibility copy for ${dir}:`, err.message)
-  }
-})
 
 console.log("==> Prisma compatibility setup finished successfully!")
